@@ -11,7 +11,9 @@ namespace StarterAssets
 #endif
 	public class FirstPersonController : MonoBehaviour
 	{
-		[Header("Player")]
+        private CharacterStats _stats;
+
+        [Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
 		public float MoveSpeed = 4.0f;
 		[Tooltip("Sprint speed of the character in m/s")]
@@ -97,7 +99,8 @@ namespace StarterAssets
 
 		private void Start()
 		{
-			_controller = GetComponent<CharacterController>();
+            _stats = GetComponent<CharacterStats>();
+            _controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 #if ENABLE_INPUT_SYSTEM
 			_playerInput = GetComponent<PlayerInput>();
@@ -153,14 +156,15 @@ namespace StarterAssets
 
 		private void Move()
 		{
-			// set target speed based on move speed, sprint speed and if sprint is pressed
-			float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+            // set target speed based on move speed, sprint speed and if sprint is pressed
+            bool isSprinting = _input.sprint && _stats.CanSprint;
+            float targetSpeed = isSprinting ? SprintSpeed : MoveSpeed;
 
-			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
+            // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
-			// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-			// if there is no input, set the target speed to 0
-			if (_input.move == Vector2.zero) targetSpeed = 0.0f;
+            // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
+            // if there is no input, set the target speed to 0
+            if (_input.move == Vector2.zero) targetSpeed = 0.0f;
 
 			// a reference to the players current horizontal velocity
 			float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
@@ -194,8 +198,17 @@ namespace StarterAssets
 				inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
 			}
 
-			// move the player
-			_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            if (isSprinting && targetSpeed > 0f)
+            {
+                _stats.DrainStamina(Time.deltaTime);
+            }
+            else
+            {
+                _stats.RegenerateStamina(Time.deltaTime);
+            }
+
+            // move the player
+            _controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 		}
 
 		private void JumpAndGravity()
