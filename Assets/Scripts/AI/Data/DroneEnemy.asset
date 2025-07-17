@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 98922fe1a8a0ce14ba98fb29f039dd7b, type: 3}
-  m_Name: DefaultEnemy
+  m_Name: DroneEnemy
   m_EditorClassIdentifier: 
-  health: 100
-  speed: 3
-  stoppingDistance: 8
-  memoryDuration: 3
+  health: 85
+  speed: 4
+  stoppingDistance: 5
+  memoryDuration: 2
   minDamage: 5
-  maxDamage: 15
-  range: 12
+  maxDamage: 8.5
+  range: 10
   attackCooldown: 1.5
-  accuracy: 0.7
+  accuracy: 0.5

@@ -8,18 +8,18 @@ public class BaseEnemyAI : MonoBehaviour
 {
     public EnemyStats stats;
 
-    private NavMeshAgent agent;
-    private Transform player;
+    protected NavMeshAgent agent;
+    protected Transform player;
 
     private float currentHealth;
     private float memoryTimer;
 
-    private float lastAttackTime = -Mathf.Infinity;
+    protected float lastAttackTime = -Mathf.Infinity;
 
     private enum AIState { Wandering, Chasing }
     private AIState currentState = AIState.Wandering;
 
-    private void Start()
+    protected virtual void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
@@ -129,20 +129,23 @@ public class BaseEnemyAI : MonoBehaviour
         if (player == null) return;
 
         Vector3 shootOrigin = transform.position + Vector3.up * 1.5f; // Adjust for enemy height
-        Vector3 directionToPlayer = (player.position + Vector3.up * 1.5f) - shootOrigin; // aim at torso/head
+        bool isAccurateShot = Random.value <= stats.accuracy;
+        Vector3 directionToPlayer = (player.position + Vector3.up * 1.5f) - shootOrigin;
+        directionToPlayer.Normalize();
 
-        // Simulate inaccuracy
-        if (Random.value > stats.accuracy)
+        if (!isAccurateShot)
         {
-            // Miss intentionally: random offset
-            directionToPlayer += new Vector3(
-                Random.Range(-0.5f, 0.5f),
-                Random.Range(-0.5f, 0.5f),
-                Random.Range(-0.5f, 0.5f)
-            );
+            Debug.Log($"{name} missed due to low accuracy.");
+            directionToPlayer = ApplyAimSpread(directionToPlayer, 15f);
+        }
+        else
+        {
+            directionToPlayer = ApplyAimSpread(directionToPlayer, 0f);
         }
 
-        directionToPlayer.Normalize();
+        // Apply inaccuracy based on accuracy %
+        float missAngle = Mathf.Lerp(15f, 0f, stats.accuracy);
+        directionToPlayer = ApplyAimSpread(directionToPlayer, missAngle);
 
         if (Physics.Raycast(shootOrigin, directionToPlayer, out RaycastHit hit, stats.range))
         {
@@ -151,14 +154,28 @@ public class BaseEnemyAI : MonoBehaviour
             var playerStats = hit.collider.GetComponentInParent<CharacterStats>();
             if (playerStats != null)
             {
-                playerStats.TakeDamage(stats.damage);
-                Debug.Log($"{name} hit the player for {stats.damage} damage.");
+                float damage = stats.GetRandomDamage();
+                playerStats.TakeDamage(damage);
+                Debug.Log($"{name} hit the player for {damage} damage.");
             }
             else
             {
                 Debug.Log($"{name} missed or hit something else: {hit.collider.name}");
             }
         }
+    }
+
+    protected Vector3 ApplyAimSpread(Vector3 direction, float maxAngleDegrees)
+    {
+        if (maxAngleDegrees <= 0f) return direction;
+
+        Quaternion randomRotation = Quaternion.Euler(
+            Random.Range(-maxAngleDegrees, maxAngleDegrees),
+            Random.Range(-maxAngleDegrees, maxAngleDegrees),
+            0f // Optional: skip roll (z-axis) for realism
+        );
+
+        return randomRotation * direction;
     }
 
     // Health system

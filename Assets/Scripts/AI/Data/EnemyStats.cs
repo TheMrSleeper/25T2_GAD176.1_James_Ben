@@ -9,14 +9,21 @@ public class EnemyStats : ScriptableObject
     public float speed = 3f;
 
     [Header("Movement Control")]
-    public float stoppingDistance = 2f;
+    public float stoppingDistance = 8f;
     public float memoryDuration = 3f;
 
     [Header("Combat Control")]
-    public float damage = 10f;
-    public float range = 10f;
+    public float minDamage = 5f;
+    public float maxDamage = 15f;
+
+    public float GetRandomDamage()
+    {
+        return Random.Range(minDamage, maxDamage);
+    }
+
+    public float range = 12f;
     public float attackCooldown = 1.5f;
-    [Range(0f, 1f)] public float accuracy = 0.75f;
+    [Range(0f, 1f)] public float accuracy = 0.7f;
 
 }
 
