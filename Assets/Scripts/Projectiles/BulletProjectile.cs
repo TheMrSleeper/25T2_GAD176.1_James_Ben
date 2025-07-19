@@ -6,10 +6,10 @@ public class BulletProjectile : BaseProjectile
 {
     protected override void OnHit(Collider other)
     {
-        // if (other.TryGetComponent<BaseEnemyAI>(out var enemy))
-        // {
-        //     enemy.TakeDamage(damage);
-        // }
+        if (other.GetComponentInParent<BaseEnemyAI>() is BaseEnemyAI enemy)
+        {
+            enemy.TakeDamage(damage);
+        }
 
         Debug.Log($"Standard projectile hit {other.name}, damage: {damage}");
         Destroy(gameObject);

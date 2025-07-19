@@ -19,10 +19,10 @@ public class DroppingAOEProjectile : BaseProjectile
 
         foreach (var col in hitColliders)
         {
-            // if (col.TryGetComponent<BaseEnemyAI>(out var enemy))
-            // {
-            //     enemy.TakeDamage(damage);
-            // }
+            if (other.GetComponentInParent<BaseEnemyAI>() is BaseEnemyAI enemy)
+            {
+                enemy.TakeDamage(damage);
+            }
 
             Debug.Log($"Dropping AOE hit {col.name}, damage: {damage}");
         }

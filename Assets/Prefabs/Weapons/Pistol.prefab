@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6918665730489502342}
   - component: {fileID: 6443733200656990828}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64,7 +64,7 @@ GameObject:
   - component: {fileID: 4665735390880358090}
   - component: {fileID: 4958813976683466904}
   - component: {fileID: 3736254438348971298}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 844270307705136974}
   - component: {fileID: 8525279882653490056}
   - component: {fileID: 6396783104695937750}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,7 +234,7 @@ GameObject:
   - component: {fileID: 76220368484594652}
   - component: {fileID: 5327182963891279694}
   - component: {fileID: 3416297669151949827}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Cube.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -315,7 +315,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3536277007178884966}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
@@ -349,7 +349,7 @@ GameObject:
   - component: {fileID: 1690087215561859592}
   - component: {fileID: 3656042686995535646}
   - component: {fileID: 5484349735246183167}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -446,7 +446,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5878504056991211030}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Trigger pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

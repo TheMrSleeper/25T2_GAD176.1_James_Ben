@@ -60,12 +60,16 @@ public class BaseWeapon : MonoBehaviour
         if (weaponData.shotType == ShotType.Hitscan)
         {
             Ray ray = new Ray(muzzleTransform.position, muzzleTransform.forward);
-            if (Physics.Raycast(ray, out RaycastHit hit, weaponData.range))
+            if (Physics.Raycast(muzzleTransform.position, muzzleTransform.forward, out RaycastHit hit, weaponData.range))
             {
-                Debug.Log($"{weaponData.weaponName} hitscan hit: {hit.collider.name}");
+                Debug.Log("Hitscan weapon hit: " + hit.collider.name);
 
-                // Apply damage logic here
-                // hit.collider.GetComponent<Health>()?.TakeDamage(weaponData.damage);
+                // Check if we hit an enemy
+                if (hit.collider.GetComponentInParent<BaseEnemyAI>() is BaseEnemyAI enemy)
+                {
+                    enemy.TakeDamage(weaponData.damage);
+                    Debug.Log($"Dealt {weaponData.damage} hitscan damage to {enemy.name}");
+                }
             }
             else
             {
