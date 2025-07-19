@@ -121,13 +121,15 @@ public class PlayerWeaponManager : MonoBehaviour
         Collider col = currentWeapon.GetComponent<Collider>();
         if (col) col.enabled = true;
 
+        // Disable the weapon logic so it can't fire or reload when dropped
+        currentWeapon.enabled = false;
+
         // Clear the appropriate slot
         if (currentWeapon == weaponSlot1)
         {
             weaponSlot1 = null;
             currentWeapon = null;
 
-            // Auto-switch to slot 2 if available
             if (weaponSlot2 != null)
             {
                 EquipWeapon(weaponSlot2);
@@ -138,7 +140,6 @@ public class PlayerWeaponManager : MonoBehaviour
             weaponSlot2 = null;
             currentWeapon = null;
 
-            // Auto-switch to slot 1 if available
             if (weaponSlot1 != null)
             {
                 EquipWeapon(weaponSlot1);

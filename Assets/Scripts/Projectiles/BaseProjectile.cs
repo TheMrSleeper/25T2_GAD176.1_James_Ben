@@ -19,6 +19,9 @@ public abstract class BaseProjectile : MonoBehaviour
     protected virtual void Start()
     {
         rb = GetComponent<Rigidbody>();
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic; // Prevent tunneling
+        rb.interpolation = RigidbodyInterpolation.Interpolate; // Smooth movement
+
         Launch();
         Destroy(gameObject, 5f); // Cleanup
     }
@@ -46,8 +49,8 @@ public abstract class BaseProjectile : MonoBehaviour
 
     protected abstract void OnHit(Collider other);
 
-    protected virtual void OnTriggerEnter(Collider other)
+    protected virtual void OnCollisionEnter(Collision collision)
     {
-        OnHit(other);
+        OnHit(collision.collider);
     }
 }
