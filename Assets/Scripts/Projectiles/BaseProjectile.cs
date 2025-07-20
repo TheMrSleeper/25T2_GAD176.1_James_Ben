@@ -28,6 +28,7 @@ public abstract class BaseProjectile : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
+        // Optional downward force (e.g. for plasma launchers)
         if (useCustomGravity)
         {
             rb.AddForce(Vector3.down * 9.81f * gravityMultiplier, ForceMode.Acceleration);

@@ -5,10 +5,10 @@ using UnityEngine;
 public class BaseWeapon : MonoBehaviour
 {
     [Header("References")]
-    public WeaponData weaponData;
-    public Transform muzzleTransform;
+    public WeaponData weaponData;         // ScriptableObject with config
+    public Transform muzzleTransform;     // Where bullets/projectiles originate
 
-    protected float lastFireTime;
+    protected float lastFireTime;         // Time of last shot
     protected int currentAmmo;
     protected bool isReloading = false;
 
@@ -19,8 +19,10 @@ public class BaseWeapon : MonoBehaviour
 
     protected virtual void Update()
     {
+        // Skip firing if reloading
         if (isReloading) return;
 
+        // Firing logic based on type
         if (weaponData.fireType == FireType.Automatic && IsFireHeld())
         {
             TryFire();
@@ -30,6 +32,7 @@ public class BaseWeapon : MonoBehaviour
             TryFire();
         }
 
+        // Manual reload
         if (IsReloadPressed() && currentAmmo < weaponData.magazineSize)
         {
             StartCoroutine(Reload());
@@ -40,6 +43,7 @@ public class BaseWeapon : MonoBehaviour
     protected virtual bool IsFireHeld() => Input.GetButton("Fire1");
     protected virtual bool IsReloadPressed() => Input.GetKeyDown(KeyCode.R);
 
+    // Attempts to fire if fire rate and ammo allow it
     protected virtual void TryFire()
     {
         if (Time.time < lastFireTime + (1f / weaponData.fireRate)) return;
@@ -55,6 +59,7 @@ public class BaseWeapon : MonoBehaviour
         FireWeapon();
     }
 
+    // Executes either hitscan or projectile logic
     protected virtual void FireWeapon()
     {
         if (weaponData.shotType == ShotType.Hitscan)
@@ -86,6 +91,7 @@ public class BaseWeapon : MonoBehaviour
                     muzzleTransform.rotation
                 );
 
+                // Prevent projectile hitting its shooter/gun
                 if (proj.TryGetComponent<Collider>(out var projCol))
                 {
                     Collider[] shooterColliders = GetComponentsInChildren<Collider>();
@@ -112,6 +118,7 @@ public class BaseWeapon : MonoBehaviour
         }
     }
 
+    // Handles reloading with a delay
     protected virtual System.Collections.IEnumerator Reload()
     {
         isReloading = true;
